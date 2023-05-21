@@ -17,57 +17,6 @@ public class PinController : ControllerBase
         
     }
 
-
-
-    //[HttpGet(Name = "GetPinSolution")]
-    //[ProducesResponseType(StatusCodes.Status200OK)]
-    //public ActionResult<IEnumerable<PinDTO>> Get()
-    //{
-    //    _logger.LogInformation("Get Pins");
-    //    return Ok(new List<PinDTO>()
-    //    {
-    //        new PinDTO() { Id=1, CalulatedPin="11"},
-    //        new PinDTO() { Id=2, CalulatedPin="22"}
-    //    });
-
-    //}
-
-    //[HttpGet("{id:int}")]
-    //[ProducesResponseType(StatusCodes.Status200OK)]
-    //[ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //public ActionResult<PinDTO> Get(int id)
-    //{
-    //    _logger.LogInformation("Get one pin ");
-    //    if (id>2)
-    //    {
-    //        _logger.LogError("ID is out of scope");
-    //        return NotFound();
-    //    }
-    //    List<PinDTO> list = new List<PinDTO>()
-    //    {
-    //        new PinDTO() { Id=1, CalulatedPin="11"},
-    //        new PinDTO() { Id=2, CalulatedPin="22"}
-    //    };
-    //    if (list != null)
-    //    {
-    //        _logger.LogError("list is null for id: " + id);
-    //        PinDTO selectedPin = list.FirstOrDefault(u => u.Id == id);
-    //        if (selectedPin != null)
-    //        {
-    //            return Ok(selectedPin);
-    //        }
-    //        else { return NotFound(); }   
-
-    //    }
-    //    else {
-    //        _logger.LogError("pin not found for id: " + id);
-    //        return NotFound(); 
-    //    }
-
-
-    //}
-
     [HttpGet("{pin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
