@@ -32,7 +32,16 @@ public class PinController : ControllerBase
         PinDTO pins = new PinDTO();
         PinMatrix pmx = new PinMatrix();
         pins.CalulatedPins = pmx.pinVariations(pin);
-        return Ok(pins);
+        
+        if (pins.CalulatedPins != null)
+        {
+            return Ok(pins);
+        }
+        else
+        {
+            return NotFound("Cannot find variations for pin: " + pin );
+        }
+        
       
 
     }
