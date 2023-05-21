@@ -3,6 +3,6 @@
     public class Pin
     {
         public int Id { get; set; }
-        public string CalulatedPin { get; set; }
+        public List<string> CalulatedPins { get; set; }
     }
 }
