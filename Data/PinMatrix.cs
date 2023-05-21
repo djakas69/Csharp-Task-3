@@ -1,7 +1,7 @@
 ﻿using Csharp_Task_3.Helpers;
 
 
-namespace Csharp_Task_3.Models.Dto
+namespace Csharp_Task_3.Data
 {
     public class PinMatrix
     {
@@ -37,7 +37,12 @@ namespace Csharp_Task_3.Models.Dto
         #endregion
 
         #region METHODS
-        public List<string> pinVariations(string num)
+        /// <summary>
+        /// GetPINs return array of all variations for given numbers up to 8 digits
+        /// </summary>
+        /// <param name="num">number that user enter</param>
+        /// <returns>array of number variations</returns>
+        public List<string> GetPINs(string num)
         {
             var result = new List<string>();
             char[] parts = num.ToCharArray();
@@ -51,41 +56,47 @@ namespace Csharp_Task_3.Models.Dto
 
             }
 
-           var result1 = Cartesian.Calculate(mainlist);
-            
-            foreach(List<string> res1 in result1)
+            var cartesianList = Cartesian.CartesianProduct(mainlist);
+            string test = "";
+            foreach (var cartesian in cartesianList)
             {
                 string temp = "";
-               foreach(string res2 in res1)
-               {
-                    temp += res2;
-               }
-                result.Add(temp);
+                foreach (var item in cartesian)
+                {
+                    temp += item;
+                }
+                if (result.Contains(temp) == false)
+                {
+                    result.Add(temp);
+                    test += temp + "," ;
+                }
+                else
+                {
+                    string doubles = temp;
+                }    
             }
-            
+
             return result;
         }
-      
 
-     
-        static IEnumerable<IEnumerable<T>> GetCombinations<T>(IEnumerable<T> list, int length)
-        {
-            if (length == 1) return list.Select(t => new T[] { t });
-
-            return GetCombinations(list, length - 1)
-                .SelectMany(t => list, (t1, t2) => t1.Concat(new T[] { t2 }));
-        }
+        /// <summary>
+        /// Return list of all possible variations for one number
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns>array list of numbers</returns>
         private List<string> oneNumberVariations(string num)
         {
             var result = new List<string>();
-            //sample for 8
-            //result = new List<string> { "5", "7", "8", "9", "0" };
-            //int keyIndex = Array.FindIndex(NumberPositions, w => w.Equals(num));
             findNumberPossitionInMatrix(num);
-            result=getOtherVaritionsForNumber();
-            result.Add(num.ToString()); 
+            result = getOtherVaritionsForNumber();
+            result.Add(num.ToString());
             return result;
         }
+        /// <summary>
+        /// Find the horisontal and vertical position for given number
+        /// That possition we will use to find alternative numbers
+        /// </summary>
+        /// <param name="num">incomming number</param>
         private void findNumberPossitionInMatrix(string num)
         {
             for (int i = 0; i < Rows; i++)
@@ -101,12 +112,16 @@ namespace Csharp_Task_3.Models.Dto
                 }
             }
         }
+        /// <summary>
+        /// Calulate list of alternative numbers for given number
+        /// </summary>
+        /// <returns>list of numbers</returns>
         private List<string> getOtherVaritionsForNumber()
         {
             List<string> result = new List<string>();
 
             #region Horisontal
-            //try left, only for CurrentColumn>0
+            //try left
             if (CurrentColumn > 0)
             {
                 string tempInt = NumberPositions[CurrentRow, CurrentColumn - 1];
@@ -115,8 +130,8 @@ namespace Csharp_Task_3.Models.Dto
                     result.Add(tempInt.ToString());
                 }
             }
-            //try right, only for CurrentRow<2
-            if (CurrentColumn < Columns-1)
+            //try right
+            if (CurrentColumn < Columns - 1)
             {
                 string tempInt = NumberPositions[CurrentRow, CurrentColumn + 1];
                 if (tempInt.Equals("-1") == false)
@@ -126,7 +141,7 @@ namespace Csharp_Task_3.Models.Dto
             }
             #endregion
             #region Vertical
-            //try up, only for CurrentRow>0
+            //try up
             if (CurrentRow > 0)
             {
                 string tempInt = NumberPositions[CurrentRow - 1, CurrentColumn];
@@ -135,8 +150,8 @@ namespace Csharp_Task_3.Models.Dto
                     result.Add(tempInt.ToString());
                 }
             }
-            //try right, only for CurrentRow<2
-            if (CurrentRow < Rows-1)
+            //try right
+            if (CurrentRow < Rows - 1)
             {
                 string tempInt = NumberPositions[CurrentRow + 1, CurrentColumn];
                 if (tempInt.Equals("-1") == false)

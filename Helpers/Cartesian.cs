@@ -1,31 +1,23 @@
-﻿namespace Csharp_Task_3.Helpers
+﻿using System.Collections;
+
+namespace Csharp_Task_3.Helpers
 {
+    /// <summary>
+    /// https://ericlippert.com/2010/06/28/computing-a-cartesian-product-with-linq/
+    /// </summary>
     public static class Cartesian
     {
-        public static List<List<T>> Calculate<T>(List<List<T>> input)
+        public static IEnumerable<IEnumerable<T>> CartesianProduct<T>
+              (this IEnumerable<IEnumerable<T>> sequences)
         {
-            List<List<T>> result = new List<List<T>>();
-            if (input.Count == 0)
-            {
-                result.Add(new List<T>());
-                return result;
-            }
-            else
-            {
-                List<T> head = input[0];
-                List<List<T>> tail = Calculate(input.GetRange(1, input.Count - 1));
-                foreach (T h in head)
-                {
-                    foreach (List<T> t in tail)
-                    {
-                        List<T> resultElement = new List<T>();
-                        resultElement.Add(h);
-                        resultElement.AddRange(t);
-                        result.Add(resultElement);
-                    }
-                }
-            }
-            return result;
+            IEnumerable<IEnumerable<T>> emptyProduct = new[] { Enumerable.Empty<T>() };
+            return sequences.Aggregate(
+              emptyProduct,
+              (accumulator, sequence) =>
+                from accseq in accumulator
+                from item in sequence
+                select accseq.Concat(new[] { item }));
         }
     }
+
 }

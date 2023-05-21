@@ -1,8 +1,10 @@
+using Csharp_Task_3.Data;
 using Csharp_Task_3.Models;
 using Csharp_Task_3.Models.Dto;
 using Csharp_Task_3.Pins;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace Csharp_Task_3.Controllers;
 
@@ -29,43 +31,42 @@ public class PinController : ControllerBase
             _logger.LogError("Pin is out of scope. Maximum lenght is 8");
             return BadRequest("Pin is out of scope. Maximum lenght is 8");
         }
-        PinDTO pins = new PinDTO();
-        PinMatrix pmx = new PinMatrix();
-        pins.CalulatedPins = pmx.pinVariations(pin);
-        
-        if (pins.CalulatedPins != null)
+
+        //we accept only digits
+        Regex  regex = new Regex("^[0-9]+$");
+
+        if (regex.IsMatch(pin))
         {
-            return Ok(pins);
+            //prepare DTO object 
+            PinDTO pins = new PinDTO();
+
+            PinMatrix pmx = new PinMatrix();
+            //calculate all variations
+            try
+            {
+                pins.CalulatedPins = pmx.GetPINs(pin);
+            }
+            catch (Exception ee)
+            {
+                _logger.LogError("GetPINs exception: " + ee.Message);
+                return NotFound("Cannot find any variations for pin: " + pin);
+            }
+
+
+            if (pins.CalulatedPins != null)
+            {
+                return Ok(pins);
+            }
+            else
+            {
+                return NotFound("Cannot find any variations for pin: " + pin);
+            }
         }
         else
         {
-            return NotFound("Cannot find variations for pin: " + pin );
+            return NotFound("Input string is not valid. Please use numbers fom 0-9, your pin is: " + pin);
         }
-        
-      
 
-    }
-
-    private IEnumerable<String> getPINs(String inputString)
-    {
-        List<String> res = new List<String>();
-        try
-        {
-            char[] chars = inputString.ToCharArray();
-            for (int i = 0;i<chars.Length; i++)
-            {
-                res.Add(chars[i].ToString());
-            }
-            //return new List<String>() { inputString };
-            //res.Add(inputString);
-            return res;
-        }
-        catch (Exception ee)
-        {
-
-            return new List<String>() { ee.Message };
-        }
-        
     }
 
 }
