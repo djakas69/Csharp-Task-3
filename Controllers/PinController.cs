@@ -26,8 +26,8 @@ public class PinController : ControllerBase
         _logger.LogInformation("Get one pin ");
         if (pin.Length > 8)
         {
-            _logger.LogError("Pin is out of scope");
-            return NotFound();
+            _logger.LogError("Pin is out of scope. Maximum lenght is 8");
+            return BadRequest("Pin is out of scope. Maximum lenght is 8");
         }
         PinDTO pins = new PinDTO();
         PinMatrix pmx = new PinMatrix();
