@@ -1,8 +1,17 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Log.Logger = (Serilog.ILogger)new LoggerConfiguration().MinimumLevel.Debug
+().WriteTo.File("d:\\temp\\log\\pinLog.txt",rollingInterval:RollingInterval.Day).CreateLogger();
 
-builder.Services.AddControllers();
+builder.Host.UseSerilog();
+
+builder.Services.AddControllers(option =>
+{
+    //option.ReturnHttpNotAcceptable = true;
+}).AddXmlSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
